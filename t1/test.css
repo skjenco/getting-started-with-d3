@@ -1,0 +1,25 @@
+svg {
+    border: solid;
+    width: 500px;
+    height: 500px;
+}
+
+body {
+    background-color: bisque;
+    display: flex;
+    flex-direction: column;
+}
+
+circle {
+    fill: green;
+    stroke: aqua;
+    stroke-width: 5px;
+    cy: 300px;
+    cx: 300px;
+}
+
+.greenCircle {
+    background-color: green;
+    color: chocolate;
+
+}
