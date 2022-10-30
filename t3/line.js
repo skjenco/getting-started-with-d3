@@ -86,10 +86,19 @@ dataGroup.append("path")
 let xAxisGroup = dataGroup.append("g");  //making a group for the my x-axis then add what I need to display and x-axis
 xAxisGroup.attr("class", "xAxisGroup");  //if I want to style it in my css give it a class
 xAxisGroup.attr("transform", "translate(0," + height + ")"); //Since svg is backwards I need to move this down the height of my svg
+//xAxisGroup.attr("transform", "translate(0," + height + ") rotate(-15)") //this wont work because it would rotate the whole group 15 degrees I only want the text
 let xAxis = d3.axisBottom(xAxisFunction);  //create a new bottom-oriented axis generator. but remember svg are backwards so I will have to move it to the bottom
-xAxis.tickFormat(d3.timeFormat("%m-%d-%y"));  //how I want to display my ticks along the x axis.  this case it will be dates
+//xAxis.tickFormat(d3.timeFormat("%m-%d-%Y"));  //how I want to display my ticks along the x axis.  this case it will be dates Note default tick size is 6
+xAxis.tickFormat(d3.timeFormat("%m-%d-%Y")).tickSize(10); //Pushes the label down a bit more so it does not run into the xaxis when I rotate them.
 
 xAxis(xAxisGroup);  //run it.  pass in your group to d3 axis bottom you created.
+
+//How to determine this code.  Inspect the label in chrome dev tools.
+//I created a class .xAxisGroup under it is class .tick under that is a tag text  that is what I will rotate
+// See howToDetermineD3selectToTransform.png
+//Note we have to selectAll instead of select which will only do the first one
+d3.selectAll(".xAxisGroup .tick text")
+    .attr("transform", "rotate(-20)");
 
 // now need to display our y axis for our datagroup
 let yAxisGroup = dataGroup.append("g");  //making a group for the my x-axis then add what I need to display and x-axis
