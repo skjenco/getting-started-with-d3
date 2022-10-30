@@ -95,7 +95,15 @@ xAxis(xAxisGroup);  //run it.  pass in your group to d3 axis bottom you created.
 let yAxisGroup = dataGroup.append("g");  //making a group for the my x-axis then add what I need to display and x-axis
 yAxisGroup.attr("class", "yAxisGroup");  //if I want to style it in my css give it a class
 let yAxis = d3.axisLeft(yAxisFunction);  //create a new bottom-oriented axis generator. but remember svg are backwards so I will have to move it to the bottom
+
+
+//Note https://stackoverflow.com/questions/34707536/two-sets-of-parentheses-in-a-javascript-function-call
+// shortcut of a function that returns a function then passing a parameter into that returned function
+// functionReturnsAFuntion(somearg)(parmforFunctionthatwasReturned);
 yAxis.tickFormat(d => yAxisFunction.tickFormat(62, d3.format(",d"))(d));
+//Is equivellent to:
+// returnedFunc = yAxisFunction.tickFormat(62, d3.format(",d"));
+// yAxis.tickFormat(d => returnedFunc(d));
 
 
 yAxis(yAxisGroup);  //run it.  pass in your group to d3 axis bottom you created.
