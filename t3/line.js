@@ -1,7 +1,7 @@
-var data = [{ date: "10/25/2018", value1: 1, value2: 1 },
-    { date: "10/26/2018", value1: 3, value2: 1 },
-    { date: "10/27/2018", value1: 1, value2: 25 },
-    { date: "10/28/2018", value1: 1, value2: 62 },
+let data = [{ date: "10/25/2018", value1: 1, value2: 0 },
+    { date: "10/26/2018", value1: 3, value2: 0 },
+    { date: "10/27/2018", value1: 0, value2: 25 },
+    { date: "10/28/2018", value1: 0, value2: 62 },
     { date: "10/29/2018", value1: 5, value2: 5 },
     { date: "10/30/2018", value1: 8, value2: 37 },
     { date: "10/31/2018", value1: 7, value2: 12 },
@@ -52,18 +52,18 @@ let xAxisFunction = d3.scaleTime()  //d3 will create for us  and x axis based on
 
 //need to make our range y axis scale
 let yAxisFunction = d3.scaleLog()
-    .domain(d3.extent(data, function (d) { return d.value1 })) // use values to compute a y axis scale
+    .domain(d3.extent(data, function (d) { return d.value1==0?1:d.value1 })) // use values to compute a y axis scale
     .range([height, 0]) //Note this is reverse of what is normal if just graphing on graph paper.  svg is reversed  you start at the top and go down so we specify are range in reverse to make go from the bottom up
 ;
 
 //Using d3 line function.  My json is and array of objects that have fields date and value1.
 let line1 = d3.line();
 line1.x(d => xAxisFunction(d.date)); // so a line is x1,y1 to x2,y2   I will have my x axis be dates  this function takes a function that will pass in the date field from my json above
-line1.y(d => yAxisFunction(d.value1));  // my y axis will be values.  passes in my value from the json above
+line1.y(d => yAxisFunction(d.value1==0?1:d.value1));  // my y axis will be values.  passes in my value from the json above
 
 let line2 = d3.line();
 line2.x(d => xAxisFunction(d.date)); // so a line is x1,y1 to x2,y2   I will have my x axis be dates  this function takes a function that will pass in the date field from my json above
-line2.y(d => yAxisFunction(d.value2));  // my y axis will be values.  passes in my value from the json above
+line2.y(d => yAxisFunction(d.value2==0?1:d.value2));  // my y axis will be values.  passes in my value from the json above
 
 
 
