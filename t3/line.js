@@ -1,7 +1,7 @@
-var data = [{ date: "10/25/2018", value1: 1, value2: 0 },
-    { date: "10/26/2018", value1: 3, value2: 0 },
-    { date: "10/27/2018", value1: 0, value2: 25 },
-    { date: "10/28/2018", value1: 0, value2: 62 },
+var data = [{ date: "10/25/2018", value1: 1, value2: 1 },
+    { date: "10/26/2018", value1: 3, value2: 1 },
+    { date: "10/27/2018", value1: 1, value2: 25 },
+    { date: "10/28/2018", value1: 1, value2: 62 },
     { date: "10/29/2018", value1: 5, value2: 5 },
     { date: "10/30/2018", value1: 8, value2: 37 },
     { date: "10/31/2018", value1: 7, value2: 12 },
@@ -51,7 +51,7 @@ let xAxisFunction = d3.scaleTime()  //d3 will create for us  and x axis based on
 ;
 
 //need to make our range y axis scale
-let yAxisFunction = d3.scaleLinear()
+let yAxisFunction = d3.scaleLog()
     .domain(d3.extent(data, function (d) { return d.value1 })) // use values to compute a y axis scale
     .range([height, 0]) //Note this is reverse of what is normal if just graphing on graph paper.  svg is reversed  you start at the top and go down so we specify are range in reverse to make go from the bottom up
 ;
@@ -94,6 +94,8 @@ xAxis(xAxisGroup);  //run it.  pass in your group to d3 axis bottom you created.
 let yAxisGroup = dataGroup.append("g");  //making a group for the my x-axis then add what I need to display and x-axis
 yAxisGroup.attr("class", "yAxisGroup");  //if I want to style it in my css give it a class
 let yAxis = d3.axisLeft(yAxisFunction);  //create a new bottom-oriented axis generator. but remember svg are backwards so I will have to move it to the bottom
+yAxis.tickFormat(d => yAxisFunction.tickFormat(62, d3.format(",d"))(d));
+
 
 yAxis(yAxisGroup);  //run it.  pass in your group to d3 axis bottom you created.
 
