@@ -5,3 +5,7 @@ svg {
 body {
     background-color: beige;
 }
+
+.xAxisGroup {
+    color: darkblue;
+}

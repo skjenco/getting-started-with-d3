@@ -37,27 +37,6 @@ mysvg.attr("width", width + margin) //width of the svg needs to be the width I w
 let dataGroup = mysvg.append("g");
 dataGroup.attr("transform", "translate("+ margin + "," + margin + ")" ); // so translate("50","50") move the group from the upper left corner over 50 and down 50.
 
-// //Need to make our domain x axis scale.  //Just use this as a cookie cutter for setting axis
-// let xAxisFunction = d3.scaleTime()  //d3 will create for us  and x axis based on dates
-//     .domain(d3.extent(data, function (d) { return d.date }))  //extent will use the data to compute the minimum and maximum value in an iterable.
-//     .range([0, width])
-// ;
-//
-// //need to make our range y axis scale
-// let yAxisFunction = d3.scaleLinear()
-//     .domain(d3.extent(data, function (d) { return d.value })) // use values to compute a y axis scale
-//     .range([height, 0])
-// ;
-//
-//
-//
-// //Using d3 line function.  My json is and array of objects that have fields date and value.
-// let line = d3.line();
-// line.x(d => xAxisFunction(d.date)); // so a line is x1,y1 to x2,y2   I will have my x axis be dates  this function takes a function that will pass in the date field from my json above
-// line.y(d => yAxisFunction(d.value));  // my y axis will be values.  passes in my value from the json above
-
-
-//Use D3 parses time so we can line up our data dates to points on the x axis
 let parseTimeForMyXaxis =  d3.timeParse("%m/%d/%Y");
 data.forEach( d => {
     console.log(d.date); //date is a string
@@ -65,26 +44,47 @@ data.forEach( d => {
     console.log(d.date); //date has now be converted into a date
 })
 
-let x = d3.scaleTime()
-    .domain(d3.extent(data, function (d) { return d.date }))
+//Need to make our domain x axis scale.  //Just use this as a cookie cutter for setting axis
+let xAxisFunction = d3.scaleTime()  //d3 will create for us  and x axis based on dates
+    .domain(d3.extent(data, function (d) { return d.date }))  //extent will use the data to compute the minimum and maximum value in an iterable.
     .range([0, width])
 ;
 
-let y = d3.scaleLinear()
-    .domain(d3.extent(data, function (d) { return d.value }))
-    .range([height, 0])
+//need to make our range y axis scale
+let yAxisFunction = d3.scaleLinear()
+    .domain(d3.extent(data, function (d) { return d.value })) // use values to compute a y axis scale
+    .range([height, 0]) //Note this is reverse of what is normal if just graphing on graph paper.  svg is reversed  you start at the top and go down so we specify are range in reverse to make go from the bottom up
 ;
 
-let line = d3.line()
-    .x(d => x(d.date))
-    .y(d => y(d.value))
-;
+//Using d3 line function.  My json is and array of objects that have fields date and value.
+let line = d3.line();
+line.x(d => xAxisFunction(d.date)); // so a line is x1,y1 to x2,y2   I will have my x axis be dates  this function takes a function that will pass in the date field from my json above
+line.y(d => yAxisFunction(d.value));  // my y axis will be values.  passes in my value from the json above
+
 
 dataGroup.append("path")
     .data([data])
     .attr("fill", "none")
     .attr("stroke", "red")
     .attr("d", line);
+
+// now need to display our x axis for our datagroup
+let xAxisGroup = dataGroup.append("g");  //making a group for the my x-axis then add what I need to display and x-axis
+xAxisGroup.attr("class", "xAxisGroup");  //if I want to style it in my css give it a class
+xAxisGroup.attr("transform", "translate(0," + height + ")"); //Since svg is backwards I need to move this down the height of my svg
+let xAxis = d3.axisBottom(xAxisFunction);  //create a new bottom-oriented axis generator. but remember svg are backwards so I will have to move it to the bottom
+xAxis.tickFormat(d3.timeFormat("%m-%d-%y"));  //how I want to display my ticks along the x axis.  this case it will be dates
+
+xAxis(xAxisGroup);  //run it.  pass in your group to d3 axis bottom you created.
+
+// now need to display our y axis for our datagroup
+let yAxisGroup = dataGroup.append("g");  //making a group for the my x-axis then add what I need to display and x-axis
+yAxisGroup.attr("class", "yAxisGroup");  //if I want to style it in my css give it a class
+let yAxis = d3.axisLeft(yAxisFunction);  //create a new bottom-oriented axis generator. but remember svg are backwards so I will have to move it to the bottom
+
+yAxis(yAxisGroup);  //run it.  pass in your group to d3 axis bottom you created.
+
+
 
 
 
