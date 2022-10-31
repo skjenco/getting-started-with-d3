@@ -1,3 +1,17 @@
+/*
+Interpolation how does data transition from one point to another
+  A person ageing from 2 to 3 years old was there a transition Yes  at some point between the person was 2 years 3 month 4days ...
+      This is called a linear transation
+
+  Counting people:   at no point between 2 and 3 people was there 2 and half people.  Discrete values. either 2 or 3 nothing else
+                         need step interpolation
+
+                         we could step before or was it step after
+
+    We may want something linear but we dont want any angles point to point harsh angel we want it smooth
+
+ */
+
 var data = [{ date: "10/25/2018", value1: 1, value2: 0 },
     { date: "10/26/2018", value1: 3, value2: 0 },
     { date: "10/27/2018", value1: 0, value2: 25 },
@@ -59,12 +73,20 @@ let yAxisFunction = d3.scaleLinear()
 //Using d3 line function.  My json is and array of objects that have fields date and value1.
 let line1 = d3.line();
 line1.x(d => xAxisFunction(d.date)); // so a line is x1,y1 to x2,y2   I will have my x axis be dates  this function takes a function that will pass in the date field from my json above
-line1.y(d => yAxisFunction(d.value1));  // my y axis will be values.  passes in my value from the json above
+line1.y(d => yAxisFunction(d.value1))  // my y axis will be values.  passes in my value from the json above
+    .curve(d3.curveLinear);
+
+let line3 = d3.line();
+line3.x(d => xAxisFunction(d.date)); // so a line is x1,y1 to x2,y2   I will have my x axis be dates  this function takes a function that will pass in the date field from my json above
+line3.y(d => yAxisFunction(d.value1))  // my y axis will be values.  passes in my value from the json above
+    .curve(d3.curveMonotoneX);
+
+
 
 let line2 = d3.line();
 line2.x(d => xAxisFunction(d.date)); // so a line is x1,y1 to x2,y2   I will have my x axis be dates  this function takes a function that will pass in the date field from my json above
-line2.y(d => yAxisFunction(d.value2));  // my y axis will be values.  passes in my value from the json above
-
+line2.y(d => yAxisFunction(d.value2))  // my y axis will be values.  passes in my value from the json above
+    .curve(d3.curveStepAfter);
 
 
 
@@ -79,6 +101,12 @@ dataGroup.append("path")
     .attr("fill", "none")
     .attr("stroke", "blue")
     .attr("d", line2);
+
+dataGroup.append("path")
+    .data([data])
+    .attr("fill", "none")
+    .attr("stroke", "green")
+    .attr("d", line3);
 
 
 // now need to display our x axis for our datagroup
