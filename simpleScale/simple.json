@@ -1,0 +1,32 @@
+[
+  {
+    "xvalue": 0,
+    "yvalue": 0,
+    "g": 3
+  },
+  {
+    "xvalue": 1,
+    "yvalue": 2,
+    "g": 5
+  },
+  {
+    "xvalue": 2,
+    "yvalue": 4,
+    "g": 4
+  },
+  {
+    "xvalue": 3,
+    "yvalue": 8,
+    "g": -1
+  },
+  {
+    "xvalue": 4,
+    "yvalue": 16,
+    "g": 4
+  },
+  {
+    "xvalue": 5,
+    "yvalue": 32,
+    "g": 30
+  }
+]
