@@ -97,6 +97,15 @@ let yAxis = d3.axisLeft(yAxisFunction);  //create a new bottom-oriented axis gen
 
 yAxis(yAxisGroup);  //run it.  pass in your group to d3 axis bottom you created.
 
+data.forEach(d =>  {  // Use the scale to place the point within the svg.  scale places the point in the correct spot
+    dataGroup.append("circle")
+        .attr("cx", xAxisFunction(d.date))
+        .attr("cy", yAxisFunction(d.value1))
+        .attr("r",7)
+        .style("fill", "black");
+
+});
+
 
 
 
