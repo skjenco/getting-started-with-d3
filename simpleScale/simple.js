@@ -99,6 +99,9 @@ createXaxisScale = (data) => {
                     .range([MARGIN,WIDTH]);
 }
 
+//User power to focus in on upper or lower end ranges
+//d3.scalePow().exponent(1.5) want to focus in on upper range value
+//d3.scalePow().exponent(.5) want to focus in on lower range values
 createYaxisScale = (data) => {
     return d3.scaleLinear()
         .domain(d3.extent(data, d => d.yvalue))
