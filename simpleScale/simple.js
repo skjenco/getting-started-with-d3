@@ -19,21 +19,35 @@ const MARGIN = 50;
 const SCALE =1;
 runMe = (data) => {
     console.log(data);
-    let mainGroup = d3.select("body").append("svg")
+    let svg = d3.select("body").append("svg")
         .attr("width",WIDTH + MARGIN*2)
-        .attr("height", HEIGHT + MARGIN*2)
-         .append("g");
+        .attr("height", HEIGHT + MARGIN*2);
+
+    let mainGroup = svg.append("g");
+
+    let onZoom = d3.zoom().on("zoom", zoomFunc);
+
+    onZoom(svg);
+
+    function zoomFunc() {
+        mainGroup.attr("transform", d3.zoomTransform(this));
+    }
 
     mainGroup.attr("transform", "translate(" + MARGIN + "," + MARGIN + ")")
 
 
 
     let xscale = createXaxisScale(data);
+    xscale.nice();
+    xscale(6);
+
     let yscale = createYaxisScale(data);
 
     yscale.nice(); //this just makes so their is not an empty tick without a number
 
-    yscale.ticks(32);
+    //create gridlines
+    createGridlinesY(mainGroup,yscale);
+    createGridlinesX(mainGroup,xscale);
 
     displayScales(mainGroup, xscale, yscale);
 
@@ -41,6 +55,28 @@ runMe = (data) => {
 
 
     data.forEach(dataItem => createPoint(mainGroup, dataItem.xvalue, dataItem.yvalue, xscale, yscale));
+
+}
+
+createGridlinesY = (group, yscale) => {
+    let gridlines = d3.axisLeft(yscale).ticks(35);
+    gridlines.tickFormat("").tickSize(-WIDTH);
+
+    let gridlineGroup = group.append("g")
+    gridlineGroup.attr("transform","translate(" + MARGIN + ",0)")
+
+    gridlineGroup.call(gridlines);
+
+}
+
+createGridlinesX = (group, xscale) => {
+    let gridlines = d3.axisBottom(xscale).ticks(10);
+    gridlines.tickFormat("").tickSize(-HEIGHT);
+
+    let gridlineGroup = group.append("g")
+    gridlineGroup.attr("transform","translate(0," + HEIGHT + ")");
+
+    gridlineGroup.call(gridlines);
 
 }
 
